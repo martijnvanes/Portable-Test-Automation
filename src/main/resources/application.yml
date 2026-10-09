@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: portable-test-automation
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+tas:
+  # Where Cucumber JSON output and Masterthought reports are written
+  reports-dir: ${TAS_REPORTS_DIR:reports}
+  # APIs under test; override the base URLs with environment variables
+  targets:
+    petstore:
+      base-url: ${PETSTORE_BASE_URL:https://petstore.swagger.io/v2}
+    wordpress:
+      base-url: ${WORDPRESS_BASE_URL:https://wordpress.org/news/wp-json/wp/v2}
+    weather:
+      base-url: ${WEATHER_BASE_URL:https://api.open-meteo.com/v1}
