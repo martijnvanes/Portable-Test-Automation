@@ -5,8 +5,9 @@ name: Build and publish image
 on:
   push:
     branches: [master]
-    # Deployment files are used on the Synology, they don't change the image
-    paths-ignore: ['deploy/**']
+    # Deployment files are used on the Synology and .claude only configures Claude Code;
+    # neither changes the image
+    paths-ignore: ['deploy/**', '.claude/**']
   workflow_dispatch:
 
 env:
