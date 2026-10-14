@@ -1,0 +1,5 @@
+# Shell scripts must keep LF line endings, also when checked out on Windows,
+# otherwise they fail inside Linux containers and CI runners
+mvnw text eol=lf
+*.sh text eol=lf
+mvnw.cmd text eol=crlf

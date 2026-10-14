@@ -1,0 +1,21 @@
+# Container Manager project for the Synology: Container Manager > Project > Create,
+# point it at a folder (e.g. /docker/tas) and paste this file.
+services:
+  tas:
+    image: ghcr.io/martijnvanes/portable-test-automation:latest
+    container_name: tas
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Override the targets here to point the same image at another environment
+      PETSTORE_BASE_URL: https://petstore.swagger.io/v2
+      WORDPRESS_BASE_URL: https://wordpress.org/news/wp-json/wp/v2
+      WEATHER_BASE_URL: https://api.open-meteo.com/v1
+    volumes:
+      # Named volume: Docker creates it with the right owner for the non-root user,
+      # which avoids the usual permission problems with Synology shared folders
+      - tas-reports:/app/reports
+
+volumes:
+  tas-reports:
