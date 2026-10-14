@@ -5,6 +5,8 @@ name: Build and publish image
 on:
   push:
     branches: [master]
+    # Deployment files are used on the Synology, they don't change the image
+    paths-ignore: ['deploy/**']
   workflow_dispatch:
 
 env:
