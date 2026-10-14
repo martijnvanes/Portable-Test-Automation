@@ -36,6 +36,20 @@ All target URLs and the reports dir are overridable with environment variables; 
 
 **Swagger UI** (springdoc 2.x; 3.x would require Spring Boot 4) is generated from the controllers; `/` redirects to it. New endpoints appear there automatically.
 
+## Code layout
+
+Under `org.example.tas`: all enumerations go in `enums/`, all models in `models/` (records, so `equals` and the validator's property-by-property comparison work), and helpers in `util/<concern>/` (one sub package per concern, so far `util/validation`). New enums and models go there, not next to the class that uses them. `run/RunResult` and the nested config classes in `TasProperties` predate this and have not been moved.
+
+## Validations
+
+Steps validate through `util/validation/ResultValidator`, not with ad-hoc RestAssured `equalTo` assertions. The rules:
+
+- The step gathers an expected and an actual of the **same type**; the validator just compares them. Models are compared property by property (nested records recursively), everything else with `equals`.
+- **Lists** (`validateAll`): for each expected, the step-supplied match predicate selects candidate actuals. No candidate fails; candidates that differ from each other fail as ambiguous (tighten the predicate); identical candidates are fine and one is consumed. Actuals left over at the end fail. The match criteria differ per validation and are decided per validation, never stored on the model.
+- **Everything is soft asserted into one report** (a single `assertAll()` at the end), so one run shows as many failures as possible. Don't add early hard asserts in the middle of a validation.
+- **`null` in the expected means "must be null".** Weaker checks are named per-property rules (`PropertyRules`/`PropertyRule`), in this order of preference: exact value, partial (`contains`, `startsWith`, `endsWith`), `regex`, `notEmpty`/`empty`, `ignore(reason)`. Only drop a level when the level above is impossible, and first try to make the value predictable (for example reuse an id from the POST response). Every rule is reported as a note (the validator is built with `scenario::log`), and a rule for a property that is never validated fails.
+- **Test data must be accurate on a shared system.** Create uniquely marked data (random id, name or tag) and narrow the actuals to it before the strict validation; never expect "only my new pet" from a get-all call. The "no leftover actuals" check never switches off.
+
 ## Build and deployment
 
 - Push to `master` → `.github/workflows/docker-publish.yml` runs `./mvnw verify`, then builds a linux/amd64 + linux/arm64 image and pushes `ghcr.io/martijnvanes/portable-test-automation` (`latest` + `sha-…`). Changes only under `deploy/**` or `.claude/**` don't trigger it.
