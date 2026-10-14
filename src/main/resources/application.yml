@@ -22,3 +22,8 @@ tas:
       base-url: ${WORDPRESS_BASE_URL:https://wordpress.org/news/wp-json/wp/v2}
     weather:
       base-url: ${WEATHER_BASE_URL:https://api.open-meteo.com/v1}
+
+springdoc:
+  swagger-ui:
+    # Show the request form directly instead of behind a "Try it out" button
+    try-it-out-enabled: true
