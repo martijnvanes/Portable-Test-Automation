@@ -1,0 +1,17 @@
+package org.example.tas.util.helpers.petstore;
+
+import org.example.tas.enums.PetStatus;
+import org.example.tas.models.petstore.Pet;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+public class petHelper {
+    public static Pet createNewPet(String name, String status) {
+        Pet pet = new Pet();
+        pet.setId(ThreadLocalRandom.current().nextLong(9_000_000_000L, 9_999_999_999L));
+        pet.setCategory(new Pet.Category());
+        pet.setName(name);
+        pet.setStatus(PetStatus.fromValue(status).value());
+        return pet;
+    }
+}

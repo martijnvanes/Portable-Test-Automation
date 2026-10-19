@@ -10,8 +10,9 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.example.tas.enums.PetStatus;
-import org.example.tas.models.Pet;
+import org.example.tas.models.petstore.Pet;
 import org.example.tas.run.TestTargets;
+import org.example.tas.util.helpers.petstore.petHelper;
 import org.example.tas.util.validation.ResultValidator;
 
 import java.util.List;
@@ -45,8 +46,7 @@ public class PetStoreSteps {
     @Given("a new pet named {string} with status {string}")
     public void aNewPet(String name, String status) {
         // A large random id keeps us clear of pets other users created on the shared server
-        long id = ThreadLocalRandom.current().nextLong(9_000_000_000L, 9_999_999_999L);
-        pet = new Pet(id, null, name, List.of(), List.of(), PetStatus.fromValue(status));
+        Pet pet = petHelper.createNewPet(name, status);
     }
 
     @Given("a pet named {string} exists in the store")
