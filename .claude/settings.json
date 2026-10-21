@@ -2,5 +2,13 @@
   "model": "opusplan",
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet"
+  },
+  "permissions": {
+    "ask": [
+      "Bash(git push*)",
+      "PowerShell(git push*)",
+      "Bash(gh pr *)",
+      "PowerShell(gh pr *)"
+    ]
   }
 }
