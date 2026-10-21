@@ -8,7 +8,6 @@ import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
 import org.example.tas.run.TestTargets;
 import org.example.tas.util.BaseTest;
-import org.example.tas.util.validation.ResultValidator;
 
 @Slf4j
 public class SetupAndTeardownCucumberScenario {
@@ -19,6 +18,7 @@ public class SetupAndTeardownCucumberScenario {
         this.baseTest = baseTest;
         scenarioContext = baseTest.scenarioContext;
     }
+
     @BeforeAll
     public static void beforeAll() {
         // before all
@@ -27,13 +27,5 @@ public class SetupAndTeardownCucumberScenario {
     @Before(order = 0, value = "@petstore")
     public void setUp(Scenario scenario) {
         log.debug("Setting up petstore ....");
-
-        spec = new RequestSpecBuilder()
-                .setBaseUri(TestTargets.current().petstore().baseUrl())
-                .setContentType(ContentType.JSON)
-                .setAccept(ContentType.JSON)
-                .build();
-        // Properties validated below "exact" end up in the report of the scenario
-        validator = new ResultValidator(scenario::log);
     }
 }

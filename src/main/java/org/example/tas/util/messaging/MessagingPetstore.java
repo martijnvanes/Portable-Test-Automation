@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.example.tas.config.TasProperties.*;
 
-public class petstore {
+public class MessagingPetstore {
     // Controller PET
     public static Response postPet(Pet pet) {
         return given().config(config).baseUri(ENV_PREFIX + ENV_INFIX + "pet")
@@ -19,6 +19,15 @@ public class petstore {
                 .post()
                 .then()
                 .statusCode(SC_OK)
+                .extract().response();
+    }
+
+    public static Response getPet(Pet pet){
+        return given().config(config).baseUri(ENV_PREFIX + ENV_INFIX + "pet/" + pet.getId())
+                .log().uri()
+                .when()
+                .get()
+                .then()
                 .extract().response();
     }
 
