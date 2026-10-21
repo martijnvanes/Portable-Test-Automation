@@ -70,7 +70,7 @@ Steps validate through the per-target classes in `util/validation` (for example 
 
 ## Build and deployment
 
-- Push to `master` → `.github/workflows/docker-publish.yml` runs `./mvnw verify`, then builds a linux/amd64 + linux/arm64 image and pushes `ghcr.io/martijnvanes/portable-test-automation` (`latest` + `sha-…`). Changes only under `deploy/**` or `.claude/**` don't trigger it.
+- A merge to `master` → `.github/workflows/docker-publish.yml` runs `./mvnw verify`, then builds a linux/amd64 + linux/arm64 image and pushes `ghcr.io/martijnvanes/portable-test-automation` (`latest` + `sha-…`). Changes only under `deploy/**` or `.claude/**`, or only to `CLAUDE.md`, do not trigger it.
 - Changes reach `master` only through pull requests from a branch; `master` is protected on GitHub, so direct pushes are rejected. Before the first commit of a change, branch off an up-to-date `master` (`git pull --ff-only`, then `git checkout -b <type>/<short-description>` with type `feature`, `fix`, `docs` or `chore`).
 - A pull request runs only the `test` job (`./mvnw verify`), which is the required status check: renaming that job in the workflow makes every pull request wait forever for a check that never reports. The image is built and published after the merge.
 - Merge with a merge commit (`gh pr merge --merge --delete-branch`) so the history keeps showing the pull request. Never merge a pull request without being asked, and ask first whether a pull request is wanted. `.claude/settings.json` has `ask` rules for `git push` and `gh pr`, so expect a prompt there.

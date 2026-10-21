@@ -5,11 +5,11 @@ name: Build and publish image
 on:
   push:
     branches: [master]
-    # Deployment files are used on the Synology and .claude only configures Claude Code;
-    # neither changes the image
-    paths-ignore: ['deploy/**', '.claude/**']
+    # Deployment files are used on the Synology, .claude and CLAUDE.md only configure Claude Code
+    # and the Dockerfile never copies them; none of them changes the image
+    paths-ignore: ['deploy/**', '.claude/**', 'CLAUDE.md']
   # Pull requests only run the tests. There is deliberately no paths-ignore here: a required
-  # status check that never runs would block a pull request that only touches deploy/ or .claude/
+  # status check that never runs would block a pull request that only touches deploy/, .claude/ or CLAUDE.md
   pull_request:
     branches: [master]
   workflow_dispatch:
