@@ -8,6 +8,10 @@ on:
     # Deployment files are used on the Synology and .claude only configures Claude Code;
     # neither changes the image
     paths-ignore: ['deploy/**', '.claude/**']
+  # Merge requests only run the tests. There is deliberately no paths-ignore here: a required
+  # status check that never runs would block a merge request that only touches deploy/ or .claude/
+  pull_request:
+    branches: [master]
   workflow_dispatch:
 
 env:
@@ -28,6 +32,8 @@ jobs:
 
   publish:
     needs: test
+    # Only master builds and pushes an image, never a merge request
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
