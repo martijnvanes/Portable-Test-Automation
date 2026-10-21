@@ -15,15 +15,14 @@ import org.example.tas.run.TestTargets;
 import org.example.tas.util.helpers.petstore.petHelper;
 import org.example.tas.util.validation.ResultValidator;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.given;
+import static org.example.tas.util.messaging.petstore.deletePet;
 
 public class PetStoreSteps {
 
     /** The public Petstore is load balanced; a write is not always visible on the next read. */
-    private static final int READ_ATTEMPTS = 5;
+
     private static final long READ_DELAY_MS = 500;
 
     private RequestSpecification spec;
@@ -32,16 +31,7 @@ public class PetStoreSteps {
     private Response response;
     private Pet retrievedPet;
 
-    @Before("@petstore")
-    public void setUp(Scenario scenario) {
-        spec = new RequestSpecBuilder()
-                .setBaseUri(TestTargets.current().petstore().baseUrl())
-                .setContentType(ContentType.JSON)
-                .setAccept(ContentType.JSON)
-                .build();
-        // Properties validated below "exact" end up in the report of the scenario
-        validator = new ResultValidator(scenario::log);
-    }
+
 
     @Given("a new pet named {string} with status {string}")
     public void aNewPet(String name, String status) {
@@ -63,8 +53,9 @@ public class PetStoreSteps {
     }
 
     @When("I delete the pet")
-    public void deletePet() {
-        response = given(spec).delete("/pet/{id}", pet.id());
+    public void iDeleteThePeletePet() {
+        Pet pet = new Pet();
+        response = deletePet(pet);
     }
 
     @Then("the response status is {int}")
@@ -74,7 +65,8 @@ public class PetStoreSteps {
 
     @Then("the pet can be retrieved by its id")
     public void petCanBeRetrieved() {
-        response = getPetExpecting(200);
+        Pet pet = new Pet();
+        response = petHelper.getPetExpecting(pet,200);
         responseStatusIs(200);
         retrievedPet = response.as(Pet.class);
         validator.validate(pet.id(), retrievedPet.id());
@@ -83,27 +75,15 @@ public class PetStoreSteps {
     @Then("the retrieved pet has name {string} and status {string}")
     public void retrievedPetHas(String name, String status) {
         // The pet is fully predictable, so every property is validated exactly
-        Pet expected = new Pet(pet.id(), pet.category(), name, pet.photoUrls(), pet.tags(),
-                PetStatus.fromValue(status));
-        validator.validate(expected, retrievedPet);
+        Pet expected = new Pet();
+        Pet actual = retrievedPet;
+        validator.validate(expected, actual);
     }
 
     @Then("the pet can no longer be found")
     public void petIsGone() {
         response = getPetExpecting(404);
         responseStatusIs(404);
-    }
-
-    private Response getPetExpecting(int status) {
-        Response result = null;
-        for (int attempt = 1; attempt <= READ_ATTEMPTS; attempt++) {
-            result = given(spec).get("/pet/{id}", pet.id());
-            if (result.statusCode() == status) {
-                break;
-            }
-            sleep();
-        }
-        return result;
     }
 
     private static void sleep() {

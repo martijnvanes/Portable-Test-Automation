@@ -22,7 +22,18 @@ public class petstore {
                 .extract().response();
     }
 
-    // Controller STORE
+    public static Response deletePet(Pet pet) {
+        return given().config(config).baseUri(ENV_PREFIX + ENV_INFIX + "pet/" + pet.getId())
+                .log().uri()
+                .when()
+                .delete()
+                .then()
+                .statusCode(SC_OK)
+                .extract().response();
+    }
 
-    // Controller USER
+
+// Controller STORE
+
+// Controller USER
 }
