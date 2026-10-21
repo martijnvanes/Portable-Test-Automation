@@ -74,10 +74,10 @@ Steps validate through the per-target classes in `util/validation` (for example 
 - Changes reach `master` only through pull requests from a branch; `master` is protected on GitHub, so direct pushes are rejected. Before the first commit of a change, branch off an up-to-date `master` (`git pull --ff-only`, then `git checkout -b <type>/<short-description>` with type `feature`, `fix`, `docs` or `chore`).
 - A pull request runs only the `test` job (`./mvnw verify`), which is the required status check: renaming that job in the workflow makes every pull request wait forever for a check that never reports. The image is built and published after the merge.
 - Merge with a merge commit (`gh pr merge --merge --delete-branch`) so the history keeps showing the pull request. Never merge a pull request without being asked, and ask first whether a pull request is wanted. `.claude/settings.json` has `ask` rules for `git push` and `gh pr`, so expect a prompt there.
-- Merging does not update the Synology: once the image build is done, run the manual update described in the last bullet below.
+- Merging does not update the Synology: once the image build is done, run the update described in the last bullet below.
 - The GHCR image is private on purpose; the Synology logs in with a token.
 - It runs on the user's Synology as Container Manager project `tas` from `deploy/synology/docker-compose.yml`, on host port **8081** (8080 is taken on the NAS). Keep that file in sync with what runs on the NAS.
-- After a successful build, the Synology does *not* pick up the new image via Container Manager's Build action. Update over SSH in the project folder: `sudo docker compose pull && sudo docker compose up -d`.
+- After a successful build, the Synology does *not* pick up the new image via Container Manager's Build action. Update with the `Update TAS` task in DSM Task Scheduler (select it and click Run), or over SSH in the project folder: `sudo docker compose pull && sudo docker compose up -d`. Setup is in `deploy/synology/README.md`.
 
 ## Gotchas
 
