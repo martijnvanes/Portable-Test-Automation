@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(properties = "tas.targets.petstore.base-url=http://localhost:9999/v2")
+@SpringBootTest(properties = "tas.targets.wordpress.base-url=http://localhost:9999/wp")
 class TasApplicationTests {
 
     @Autowired
@@ -20,7 +20,7 @@ class TasApplicationTests {
 
     @Test
     void targetBaseUrlsCanBeOverridden() {
-        assertThat(properties.targets().petstore().baseUrl()).isEqualTo("http://localhost:9999/v2");
+        assertThat(properties.targets().wordpress().baseUrl()).isEqualTo("http://localhost:9999/wp");
         assertThat(properties.targets().weather().baseUrl()).isEqualTo("https://api.open-meteo.com/v1");
     }
 }

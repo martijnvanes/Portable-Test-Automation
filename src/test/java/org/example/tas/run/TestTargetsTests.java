@@ -16,7 +16,6 @@ class TestTargetsTests {
     void fallsBackToApplicationYmlWhenNothingWasSet() {
         TestTargets.clear();
 
-        assertThat(TestTargets.current().petstore().baseUrl()).isNotBlank();
         assertThat(TestTargets.current().wordpress().baseUrl()).isNotBlank();
         assertThat(TestTargets.current().weather().baseUrl()).isNotBlank();
     }

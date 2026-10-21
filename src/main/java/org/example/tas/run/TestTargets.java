@@ -41,7 +41,7 @@ public final class TestTargets {
     /**
      * Fallback for runs that bypass {@link TestRunService}, such as a single scenario started from the IDE.
      * Binds {@code tas.targets} from application.yml without a Spring context; the environment variables
-     * (PETSTORE_BASE_URL and so on) still override the defaults, exactly as in a normal run.
+     * (WORDPRESS_BASE_URL and so on) still override the defaults, exactly as in a normal run.
      */
     private static synchronized TasProperties.Targets loadFromApplicationYml() {
         if (current != null) {

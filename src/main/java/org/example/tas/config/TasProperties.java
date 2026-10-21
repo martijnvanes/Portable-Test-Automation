@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "tas")
 public record TasProperties(String reportsDir, Targets targets) {
 
-    public record Targets(Target petstore, Target wordpress, Target weather) {
+    public record Targets(Target wordpress, Target weather) {
     }
 
     public record Target(String baseUrl) {

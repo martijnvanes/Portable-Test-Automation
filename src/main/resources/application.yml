@@ -16,8 +16,6 @@ tas:
   reports-dir: ${TAS_REPORTS_DIR:reports}
   # APIs under test; override the base URLs with environment variables
   targets:
-    petstore:
-      base-url: ${PETSTORE_BASE_URL:https://petstore.swagger.io/v2}
     wordpress:
       base-url: ${WORDPRESS_BASE_URL:https://wordpress.org/news/wp-json/wp/v2}
     weather:
