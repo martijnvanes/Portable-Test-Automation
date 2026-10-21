@@ -71,6 +71,7 @@ Steps validate through the per-target classes in `util/validation` (for example 
 ## Build and deployment
 
 - Push to `master` → `.github/workflows/docker-publish.yml` runs `./mvnw verify`, then builds a linux/amd64 + linux/arm64 image and pushes `ghcr.io/martijnvanes/portable-test-automation` (`latest` + `sha-…`). Changes only under `deploy/**` or `.claude/**` don't trigger it.
+- Changes reach `master` only through merge requests from a branch, never by pushing to `master` (protected branch). A merge request runs only the `test` job (`./mvnw verify`); the image is built and published after the merge. Never merge or push to `master` without being asked, and ask first whether a merge request is wanted.
 - The GHCR image is private on purpose; the Synology logs in with a token.
 - It runs on the user's Synology as Container Manager project `tas` from `deploy/synology/docker-compose.yml`, on host port **8081** (8080 is taken on the NAS). Keep that file in sync with what runs on the NAS.
 - After a successful build, the Synology does *not* pick up the new image via Container Manager's Build action. Update over SSH in the project folder: `sudo docker compose pull && sudo docker compose up -d`.
